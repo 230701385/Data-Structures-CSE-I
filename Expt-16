@@ -1,0 +1,119 @@
+NAME: S. Vishwak
+REGISTER NO.:230701385
+
+EX-16: Implementation Collision Resolution Techniques 
+
+#include<stdio.h>
+#include<stdlib.h>
+#define  SIZE 10
+int hash_tab[SIZE];
+struct node
+{
+    int data;
+    struct node *link;
+}*HT[SIZE];
+
+void open_add(int);
+void cls_add(int);
+int rehash(int);
+int chk_prime(int);
+void open_add(int key)
+{
+    int ind=key%SIZE;
+    while(hash_tab[ind]!=0){
+        ind=(ind+1)%SIZE;
+    }
+    hash_tab[ind]=key;
+}
+
+void cls_add(int key)
+{
+    struct node *newnode;
+    newnode=(struct node*)malloc(sizeof(struct node));
+    newnode->link=NULL;
+    newnode->data=key;
+    int ind=key%SIZE;
+    if(HT[ind]==NULL){
+        HT[ind]=newnode;
+    }
+    else{
+        struct node *temp=HT[ind];
+        while(temp->link!=NULL){
+            temp=temp->link;
+        }
+        temp->link=newnode;
+    }
+}
+int chk_prime(int size){
+    int flag=0;
+    for(int i=2;i<size;i++){
+        if(size%i==0)
+            flag=1;
+            break;
+    }
+    return flag;
+}
+
+int rehash(int size){
+    size=SIZE*2;
+    int f=chk_prime(size);
+    while(f!=0){
+        size+=1;
+        f=chk_prime(size);
+    }
+    return size;
+}
+int main(){
+    int size,ch,n;
+    printf("\nEnter the number of elements: ");
+    scanf("%d",&size);
+    for(int i=0;i<SIZE;i++){
+        hash_tab[i]=0;
+        HT[i]=NULL;
+    }
+    printf("\nEnter the choice of collision resolution\n1. Open Addressing\n2. Closed Addressing :\n");
+    scanf("%d",&ch);
+    if(ch==1){
+        if(size >= SIZE-1){
+            int s=rehash(size);
+            for(int i=0;i<size;i++){
+                printf("\nEnter element: ");
+                scanf("%d",&n);
+            int ind=n%s;
+            while(hash_tab[ind]!=0){
+            ind=(ind+1)%s;
+    }
+    hash_tab[ind]=n;
+    }
+    for(int i=0;i<s;i++){
+            printf("\n%d %d\n",i,hash_tab[i]);
+        }
+        }
+        else{
+        for(int i=0;i<size;i++){
+            printf("\nEnter element: ");
+            scanf("%d",&n);
+            open_add(n);
+        }
+        for(int i=0;i<SIZE;i++){
+            printf("\n%d %d\n",i,hash_tab[i]);
+        }
+    }
+    }
+    else if(ch==2){
+        for(int i=0;i<size;i++){
+            printf("\nEnter element: ");
+            scanf("%d",&n);
+            cls_add(n);
+        }
+        for(int i=0;i<SIZE;i++){
+            printf("%d ",i);
+            struct node *temp=HT[i];
+            while(temp!=NULL){
+                printf("%d ",temp->data);
+                temp=temp->link;
+            }
+            printf("\n");
+        }
+    }
+}
