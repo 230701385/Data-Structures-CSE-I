@@ -1,0 +1,233 @@
+NAME: S. Vishwak
+REGISTER NO.:230701385
+
+EX-3: Polynomial Manupilation
+
+
+#include<stdio.h>
+#include<stdlib.h>
+
+struct node
+{
+    int coeff;
+    int pow;
+    struct node *link;
+};
+
+void create(int,int,struct node *);
+void add(struct node *,struct node *,struct node *);
+void display(struct node *);
+void sub(struct node *,struct node *,struct node *);
+void mult(struct node *,struct node *,struct node *);
+
+void create(int coef, int power, struct node *poly)
+{
+    struct node *newnode, *last = poly;
+    newnode = (struct node *)malloc(sizeof(struct node));
+    newnode->coeff = coef;
+    newnode->pow = power;
+    newnode->link = NULL;
+    while(last->link!=NULL){
+        last=last->link;
+    }
+    last->link= newnode;
+}
+
+void add(struct node *poly1,struct node *poly2,struct node *ans)
+{
+    struct node *temp=ans;
+    while(poly1!=NULL && poly2!=NULL)
+    {
+        struct node *newnode;
+        newnode= (struct node *)malloc(sizeof(struct node));
+        if(poly1->pow == poly2->pow)
+        {
+            newnode->coeff=poly1->coeff+poly2->coeff;
+            newnode->pow=poly1->pow;
+            newnode->link=NULL;
+            poly1=poly1->link;
+            poly2=poly2->link;
+        }
+        else if(poly1->pow>poly2->pow){
+            newnode->pow=poly1->pow;
+            newnode->coeff=poly1->coeff;
+            newnode->link=NULL;
+            poly1=poly1->link;
+        }
+        else if(poly2->pow>poly1->pow){
+            newnode->pow=poly2->pow;
+            newnode->coeff=poly2->coeff;
+            newnode->link=NULL;
+            poly2=poly2->link;
+        }
+            temp->link=newnode;
+            temp=temp->link;
+    }
+    while(poly1!=NULL || poly2!=NULL){
+        if(poly1!=NULL){
+            struct node *newnode;
+            newnode= (struct node *)malloc(sizeof(struct node));
+            newnode->coeff=poly1->coeff;
+            newnode->pow=poly1->pow;
+            newnode->link=NULL;
+            poly1=poly1->link;
+            temp->link=newnode;
+            temp=temp->link;
+        }
+    if(poly2!=NULL){
+            struct node *newnode;
+            newnode= (struct node *)malloc(sizeof(struct node));
+            newnode->coeff=poly2->coeff;
+            newnode->pow=poly1->pow;
+            newnode->link=NULL;
+            poly2=poly2->link;
+            temp->link=newnode;
+            temp=temp->link;
+        }
+    }
+}
+void sub(struct node *poly1,struct node *poly2,struct node *ans)
+{
+    struct node *temp=ans;
+    while(poly1!=NULL && poly2!=NULL)
+    {
+        struct node *newnode;
+        newnode= (struct node *)malloc(sizeof(struct node));
+        if(poly1->pow == poly2->pow)
+        {
+            newnode->coeff=poly1->coeff-poly2->coeff;
+            newnode->pow=poly1->pow;
+            newnode->link=NULL;
+            poly1=poly1->link;
+            poly2=poly2->link;
+        }
+        else if(poly1->pow>poly2->pow){
+            newnode->pow=poly1->pow;
+            newnode->coeff=poly1->coeff-0;
+            newnode->link=NULL;
+            poly1=poly1->link;
+        }
+        else if(poly2->pow>poly1->pow){
+            newnode->pow=poly2->pow;
+            newnode->coeff=0-poly2->coeff;
+            newnode->link=NULL;
+            poly2=poly2->link;
+        }
+            temp->link=newnode;
+            temp=temp->link;
+    }
+    while(poly1!=NULL || poly2!=NULL){
+        if(poly1!=NULL){
+            struct node *newnode;
+            newnode= (struct node *)malloc(sizeof(struct node));
+            newnode->coeff=poly1->coeff-0;
+            newnode->pow=poly1->pow;
+            newnode->link=NULL;
+            poly1=poly1->link;
+            temp->link=newnode;
+            temp=temp->link;
+        }
+    if(poly2!=NULL){
+            struct node *newnode;
+            newnode= (struct node *)malloc(sizeof(struct node));
+            newnode->coeff=0-poly2->coeff;
+            newnode->pow=poly2->pow;
+            newnode->link=NULL;
+            poly2=poly2->link;
+            temp->link=newnode;
+            temp=temp->link;
+        }
+    }
+}
+
+void mult(struct node *poly1,struct node *poly2,struct node *ans)
+{
+    struct node *temp=ans,*temp1=poly1,*temp2;
+    while(temp1!=NULL)
+    {
+        temp2=poly2;
+    while(temp2!=NULL)
+        {
+        struct node *newnode;
+        newnode=(struct node *)malloc(sizeof(struct node));
+        newnode->coeff=temp1->coeff*temp2->coeff;
+        newnode->pow=temp1->pow+temp2->pow;
+        newnode->link=NULL;
+        temp2=temp2->link;
+        temp->link=newnode; 
+        temp=temp->link;
+        }
+        
+    temp1=temp1->link;
+}
+}
+
+void display(struct node *ans)
+{
+    struct node *temp=ans->link;
+    while(temp->link!=NULL){
+        if(temp->coeff>=0 && temp->link!=NULL){
+        printf(" %dx^%d + ",temp->coeff,temp->pow);
+        }
+        else if(temp->coeff<0 && temp->link!=NULL){
+            printf(" %dx^%d - ",temp->coeff,temp->pow);
+        }
+        temp=temp->link;
+    }
+    printf(" %dx^%d",temp->coeff,temp->pow);
+}
+
+int main()
+{
+    int pow,coeff,n,ch,t=3;
+    struct node *poly1,*poly2,*result;
+    poly1= (struct node *)malloc(sizeof(struct node));
+    poly2= (struct node *)malloc(sizeof(struct node));
+    result= (struct node *)malloc(sizeof(struct node));
+    poly1->link=NULL;poly2->link=NULL,result->link=NULL;
+    printf("\nEnter the number of terms in Poly1: ");
+    scanf("%d",&n);
+    for(int i=0;i<n;i++){
+        printf("\nEnter coeff : ");
+        scanf("%d",&coeff);
+        printf("\nEnter pow : ");
+        scanf("%d",&pow);
+        create(coeff,pow,poly1);
+    }
+    printf("\nEnter the number of terms in Poly2: ");
+    scanf("%d",&n);
+    for(int i=0;i<n;i++){
+        printf("\nEnter coeff : ");
+        scanf("%d",&coeff);
+        printf("\nEnter pow : ");
+        scanf("%d",&pow);
+        create(coeff,pow,poly2);
+    }
+    printf("\n\nPolynomials created");
+    while(t--){
+    printf("\n\nChoose the operation\n1.Addition\n2.Subtraction\n3.Multiplication\n4.Exit(auto exit after 3 loops) : ");
+    scanf("%d",&ch);
+    switch(ch){
+        case 1:
+            printf("\n\nAdding the polynomials and evaluating result :");
+            add(poly1->link,poly2->link,result);
+            display(result);
+            break;
+        case 2:
+            printf("\n\nSubtracting the polynomials and evaluating result :");
+            sub(poly1->link,poly2->link,result);
+            display(result);
+            break;
+        case 3:
+            printf("\n\nMultiplying the polynomials and evaluating result :");
+            mult(poly1->link,poly2->link,result);
+            display(result);
+            break;
+    case 4:
+            printf("\n\nExiting program");
+            exit(1);
+    default:
+            printf("\nInvalid operation");
+    }
+}
+}
