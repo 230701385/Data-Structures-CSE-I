@@ -1,0 +1,110 @@
+NAME: S. Vishwak
+REGISTER NO.:230701385
+
+
+EX-6: Evaluation of Arithmetic Expression 
+
+#include<stdio.h>
+#include<string.h>
+#define size 20
+char post[size];
+char stack[size];
+int top=-1;
+
+int isEmpty();
+void push(char);
+char pop();
+int isFull();
+void eval();
+
+int isFull(){
+    if(top==size-1)
+        return 1;
+    else
+    return 0;
+}
+
+void push(char ch)
+{
+    if(isFull()){
+        printf("\nOverflow");
+    }
+    else{
+    top=top+1;
+    stack[top]=ch;
+    }
+}
+
+char pop()
+{
+    int temp;
+    if(isEmpty()){
+        printf("\nNo data in stack");
+    }
+    else{
+    temp=stack[top];
+    top=top-1;
+    return temp;
+}
+}
+
+int isEmpty()
+{
+    if(top==-1)
+    return 1;
+    else 
+    return 0;
+}
+void eval()
+{
+    int x,y,eval;
+    char ch;
+    for(int i=0;i<strlen(post);i++)
+    {
+        ch=post[i];
+        if(ch>='a' && ch<='z'){
+            printf("\nEnter the value of %c : ",ch);
+            scanf("%d",&ch);
+            push(ch);
+        }
+        else
+        {
+            x=pop();
+            y=pop();
+            switch(ch)
+            {
+                case '^':
+                    eval=y^x;
+                    push(eval);
+                    break;
+                case '/':
+                    eval=y/x;
+                    push(eval);
+                    break;
+                case '*':
+                    eval=y*x;
+                    push(eval);
+                    break;
+                case '+':
+                    eval=y+x;
+                    push(eval);
+                    break;
+                case '-':
+                    eval=y-x;
+                    push(eval);
+                    break;
+            }       
+        }
+    }
+    printf("\nThe value of the postfix expression is : ");
+    printf("%d",pop());
+}
+
+int main()
+{
+    printf("\nEnter postfix expression: ");
+    gets(post);
+    eval();
+    return 0;
+}
+
