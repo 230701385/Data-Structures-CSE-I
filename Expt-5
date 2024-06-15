@@ -1,0 +1,133 @@
+NAME: S. Vishwak
+REGISTER NO.:230701385
+
+EX-5: Infix to Postfix
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#define size 10
+
+char stack[size];
+char infix[size],postfix[size];
+int top=-1;
+
+void intopost();
+int prec(char);
+int isEmpty();
+void push(char);
+char pop();
+int isFull();
+void print();
+
+int isFull(){
+    if(top==size-1)
+        return 1;
+    else
+    return 0;
+}
+
+void push(char ch)
+{
+    if(isFull()){
+        printf("\nOverflow");
+    }
+    else{
+    top=top+1;
+    stack[top]=ch;
+    }
+}
+
+char pop()
+{
+    int temp;
+    if(isEmpty()){
+        printf("\nNo data in stack");
+    }
+    else{
+    temp=stack[top];
+    top=top-1;
+    return temp;
+}
+}
+
+int isEmpty()
+{
+    if(top==-1)
+    return 1;
+    else 
+    return 0;
+}
+
+int prec(char chr){
+    switch(chr)
+    {
+            case '+':
+            case '-':
+                return 1;
+            case '/':
+            case '*':
+                return 2;
+            case '^':
+                return 3;
+            default:
+            return 0;
+    }
+}
+
+void intopost()
+{
+    char ch;
+    int j=0;
+    for(int i=0;i<strlen(infix);i++)
+    {
+        ch = infix[i];
+        switch(ch)
+        {
+            case '(':
+                push(ch);
+                break;
+            case')':
+                while(stack[top]!='('){
+                    postfix[j]=pop();
+                    j++;
+                }
+                    pop();
+                break;
+            case '+':
+            case '-':
+            case '/':
+            case '*':
+            case '^':
+                 while(prec(stack[top]>=prec(ch)))
+                    postfix[j++]=pop();
+                push(ch);
+                break;
+            
+            default:
+            postfix[j++]=ch;
+        }
+    }
+    while(!isEmpty()){
+    postfix[j++]=pop();
+    }
+    postfix[j]='\0';
+}
+
+void print()
+{
+    int i=0;
+    printf("The postfix expression is :");
+    while(postfix[i]!='\0'){
+        printf("%c",postfix[i]);
+        i++;
+    }
+}
+    int main()
+{
+    printf("Enter the infix exp :");
+    gets(infix);
+    intopost();
+    print();
+    return 0;
+}
